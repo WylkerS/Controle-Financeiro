@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen font-sans text-gray-900">
+
+    <header class="w-full bg-black text-white font-sans shadow-md">
+
+        <div class="container mx-auto px-4 py-6 md:py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                
+                <div class="w-full md:w-1/3 order-2 md:order-1 flex justify-center md:justify-start">
+                    
+                </div>
+
+                <div class="w-full md:w-1/3 flex justify-center order-1 md:order-2 text-center">
+                    <a href="/" class="text-3xl md:text-4xl text-white select-none hover:text-amber-500 transition-colors duration-300" style="font-family: 'Dancing Script', cursive;">
+                        Controle de Finanças Pessoais
+                    </a>
+                </div>
+
+                <div class="w-full md:w-1/3 flex justify-center md:justify-end items-center gap-6 order-3">
+                    <a href="/accounts/view" class="hover:text-amber-500 transition-colors cursor-pointer">
+                        <i data-lucide="user" class="w-6 h-6 stroke-[1.5]"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <nav class="border-t border-neutral-800 border-b w-full">
+            <div class="container mx-auto">
+                <ul class="flex justify-center items-center gap-6 md:gap-10 py-5">
+                    
+                    <li>
+                        <a href="/accounts/view" 
+                           class="text-[15px] font-medium tracking-wide uppercase transition-colors duration-300 <%= pageType === 'account' ? 'text-amber-500' : 'text-white hover:text-amber-500' %>">
+                            Contas
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/categories/view" 
+                           class="text-[15px] font-medium tracking-wide uppercase transition-colors duration-300 <%= pageType === 'category' ? 'text-amber-500' : 'text-white hover:text-amber-500' %>">
+                            Categorias
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/transactions/view" 
+                           class="text-[15px] font-medium tracking-wide uppercase transition-colors duration-300 <%= pageType === 'transaction' ? 'text-amber-500' : 'text-white hover:text-amber-500' %>">
+                            Transações
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <% if (pageType === 'category') { %>
+            <div class="bg-white rounded-lg shadow p-6">
+                <%- include('../categories/index.ejs') %>
+            </div>
+        <% } else if (pageType === 'account') { %>
+            <div class="bg-white rounded-lg shadow p-6">
+                <%- include('../accounts/index.ejs') %> 
+            </div>
+        <% } else if (pageType === 'transaction') { %>
+            <div class="bg-white rounded-lg shadow p-6">
+                <%- include('../transactions/index.ejs') %>
+            </div>
+        <% } else if (pageType === 'home') { %>
+            <div class="w-full"> <%- include('../index.ejs') %> 
+            </div>
+        <% } else { %>
+            <div class="text-center py-20">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Bem-vindo!</h2>
+                <p class="text-gray-600">Página não encontrada ou não definida.</p>
+            </div>
+        <% } %>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Projeto <span class="text-amber-500 font-bold">PWEB</span></p>
+            <p>Wylker Esperidião da Silva / Roberto Matheus...</p>
+            
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

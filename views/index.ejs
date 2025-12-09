@@ -1,0 +1,142 @@
+<div class="flex justify-center items-center mb-8 bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+    <a href="<%= prevLink %>" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <i data-lucide="chevron-left" class="w-6 h-6 text-gray-600"></i>
+    </a>
+    <div class="mx-6 text-center w-48">
+        <h2 class="text-lg font-bold text-gray-800 capitalize flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-5 h-5 text-amber-500"></i>
+            <%= currentDateDisplay %>
+        </h2>
+    </div>
+    <a href="<%= nextLink %>" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <i data-lucide="chevron-right" class="w-6 h-6 text-gray-600"></i>
+    </a>
+</div>
+
+<div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-amber-500 pl-3">Visão Geral</h2>
+        <p class="text-sm text-gray-500 mt-1 ml-4">Movimentações de <%= currentDateDisplay %>.</p>
+    </div>
+    <div class="flex gap-2">
+        <a href="/accounts/view" class="flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2 rounded-md transition-all shadow-sm text-sm font-medium">
+            <i data-lucide="users" class="w-4 h-4"></i> Contas
+        </a>
+        <a href="/transactions/view" class="flex items-center gap-2 bg-black hover:bg-neutral-800 text-white px-4 py-2 rounded-md transition-all shadow-md text-sm font-medium">
+            <i data-lucide="plus" class="w-4 h-4"></i> Transação
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+    <div class="bg-white border-l-4 <%= monthlyBalance >= 0 ? 'border-green-600' : 'border-red-600' %> rounded-r-lg p-6 shadow-sm flex items-center justify-between">
+        <div class="z-10">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Balanço Mensal</p>
+            <h3 class="text-3xl font-bold text-black tracking-tight <%= monthlyBalance >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                R$ <%= typeof monthlyBalance !== 'undefined' ? monthlyBalance.toFixed(2) : '0.00' %>
+            </h3>
+            <p class="text-[10px] text-gray-400 mt-2 flex items-center gap-1">
+                <i data-lucide="<%= monthlyBalance >= 0 ? 'trending-up' : 'trending-down' %>" class="w-3 h-3"></i>
+                <%= monthlyBalance >= 0 ? 'Superávit (Sobrou)' : 'Déficit (Faltou)' %>
+            </p>
+        </div>
+        <div class="p-3 bg-white/10 rounded-full text-white">
+            <i data-lucide="scale" class="w-8 h-8"></i>
+        </div>
+    </div>
+
+    <div class="bg-white border-l-4 border-green-500 rounded-r-lg p-6 shadow-sm flex items-center justify-between">
+        <div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Entradas</p>
+            <h3 class="text-2xl font-bold text-green-600">
+                + R$ <%= typeof monthIncome !== 'undefined' ? monthIncome.toFixed(2) : '0.00' %>
+            </h3>
+        </div>
+        <div class="p-3 bg-green-50 rounded-full text-green-600">
+            <i data-lucide="arrow-up-circle" class="w-6 h-6"></i>
+        </div>
+    </div>
+
+    <div class="bg-white border-l-4 border-red-500 rounded-r-lg p-6 shadow-sm flex items-center justify-between">
+        <div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Saídas</p>
+            <h3 class="text-2xl font-bold text-red-600">
+                - R$ <%= typeof monthExpense !== 'undefined' ? monthExpense.toFixed(2) : '0.00' %>
+            </h3>
+        </div>
+        <div class="p-3 bg-red-50 rounded-full text-red-600">
+            <i data-lucide="arrow-down-circle" class="w-6 h-6"></i>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                    <i data-lucide="list" class="w-4 h-4 text-gray-400"></i>
+                    Extrato de <%= currentDateDisplay %>
+                </h3>
+            </div>
+            
+            <div class="divide-y divide-gray-100">
+                <% if (recentTransactions && recentTransactions.length > 0) { %>
+                    <% recentTransactions.forEach(t => { %>
+                        <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center <%= t.transactionType === 'INCOME' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' %>">
+                                    <i data-lucide="<%= t.transactionType === 'INCOME' ? 'arrow-up' : 'arrow-down' %>" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-800"><%= t.description || 'Sem descrição' %></h4>
+                                    <div class="flex gap-2 text-xs text-gray-500 mt-1">
+                                        <span class="bg-gray-100 px-1.5 py-0.5 rounded font-mono">
+                                            <%= t.date.split('-').reverse().join('/').slice(0, 5) %>
+                                        </span>
+                                        <% if(t.totalInstallments > 1) { %>
+                                            <span class="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">
+                                                <%= t.currentInstallment %>/<%= t.totalInstallments %>
+                                            </span>
+                                        <% } %>
+                                        <span class="flex items-center">
+                                            <%= t.category ? t.category.name : 'Geral' %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold font-mono <%= t.transactionType === 'INCOME' ? 'text-green-600' : 'text-red-600' %>">
+                                    <%= t.transactionType === 'INCOME' ? '+' : '-' %> R$ <%= Number(t.value).toFixed(2) %>
+                                </p>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="p-10 text-center text-gray-500">
+                        <p class="text-sm">Nenhuma transação neste mês.</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="lg:col-span-1 space-y-6">
+        <div class="grid grid-cols-2 gap-3">
+            <a href="/accounts/view" class="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 hover:border-amber-400 rounded-lg transition-all text-center">
+                <i data-lucide="users" class="w-6 h-6 text-gray-400 mb-2"></i>
+                <span class="text-xs font-bold text-gray-600">Contas</span>
+            </a>
+            <a href="/categories/view" class="flex flex-col items-center justify-center p-4 bg-white border border-gray-200 hover:border-purple-400 rounded-lg transition-all text-center">
+                <i data-lucide="tag" class="w-6 h-6 text-gray-400 mb-2"></i>
+                <span class="text-xs font-bold text-gray-600">Categorias</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>

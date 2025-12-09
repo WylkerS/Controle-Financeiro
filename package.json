@@ -1,0 +1,36 @@
+{
+  "name": "personal-expense-pweb",
+  "version": "1.0.0",
+  "description": "This project implements a **Personal Expense Tracker** application, fulfilling the requirements for a basic CRUD system in the **Programação WEB (PWEB)** course.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "dev:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertomatheuss/Personal-Expense-PWEB.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/robertomatheuss/Personal-Expense-PWEB/issues"
+  },
+  "homepage": "https://github.com/robertomatheuss/Personal-Expense-PWEB#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "nodemon": "^3.1.11",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}

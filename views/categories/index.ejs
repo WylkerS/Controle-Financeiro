@@ -1,0 +1,156 @@
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-amber-500 pl-3">Categorias</h2>
+    <button onclick="showCreateForm()" class="bg-black text-white px-5 py-2.5 rounded-md text-sm font-medium uppercase hover:bg-neutral-800 flex gap-2 items-center">
+        <i data-lucide="plus" class="w-4 h-4"></i> Nova Categoria
+    </button>
+</div>
+
+<div id="categoryFormContainer" class="hidden mb-8 bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden animate-fade-in-down">
+    <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+        <h3 class="font-bold text-gray-800" id="formTitle">Nova Categoria</h3>
+        <button onclick="hideForm()" class="text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <form id="categoryForm" class="p-6">
+        <input type="hidden" id="categoryId">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Nome</label>
+                <input type="text" id="name" name="name" required class="w-full border-gray-300 border rounded-md py-2 px-3" placeholder="Ex: Alimentação, Salário, Transporte...">
+            </div>
+            
+            <div>
+                <label class="block text-xs font-bold text-gray-600 uppercase mb-2">Tipo de Movimento</label>
+                <select id="type" name="type" required class="w-full border-gray-300 rounded-md py-2 px-3 bg-white border">
+                    <option value="EXPENSE">Despesa (Saída)</option>
+                    <option value="INCOME">Receita (Entrada)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="flex justify-end gap-3 mt-6">
+            <button type="button" onclick="hideForm()" class="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-50">Cancelar</button>
+            <button type="submit" id="saveBtn" class="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 font-medium">Salvar</button>
+        </div>
+    </form>
+</div>
+
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">Nome</th>
+                <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase">Tipo</th>
+                <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            <% if(categories.length > 0) { %>
+                <% categories.forEach(cat => { %>
+                <tr class="hover:bg-gray-50 group">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900"><%= cat.name %></td>
+                    
+                    <td class="px-6 py-4">
+                        <span class="text-[10px] uppercase px-2 py-1 rounded-full font-bold tracking-wide border <%= cat.type === 'INCOME' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200' %>">
+                            <%= cat.type === 'INCOME' ? 'Receita' : 'Despesa' %>
+                        </span>
+                    </td>
+
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end gap-2">
+                            <button onclick="editCategory(<%= JSON.stringify(cat) %>)" class="text-indigo-600 hover:text-indigo-900 p-1 rounded hover:bg-indigo-50" title="Editar">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="deleteCategory(<%= cat.id %>)" class="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50" title="Excluir">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+            <% } else { %>
+                <tr><td colspan="3" class="p-6 text-center text-gray-500">Nenhuma categoria cadastrada.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    
+    const formContainer = document.getElementById('categoryFormContainer');
+    const form = document.getElementById('categoryForm');
+    const formTitle = document.getElementById('formTitle');
+
+    function showCreateForm() { 
+        formContainer.classList.remove('hidden'); 
+        form.reset(); 
+        
+        document.getElementById('categoryId').value = ''; 
+        formTitle.innerText = 'Nova Categoria';
+        
+        formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function editCategory(cat) {
+        formContainer.classList.remove('hidden'); 
+        
+        formTitle.innerText = 'Editar Categoria';
+        document.getElementById('categoryId').value = cat.id;
+        document.getElementById('name').value = cat.name;
+        document.getElementById('type').value = cat.type;
+        
+        formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideForm() { 
+        formContainer.classList.add('hidden'); 
+        form.reset();
+    }
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const saveBtn = document.getElementById('saveBtn');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = 'Salvando...';
+
+        const id = document.getElementById('categoryId').value;
+        const url = id ? `/categories/${id}` : '/categories';
+        const method = id ? 'PUT' : 'POST';
+        
+        const body = JSON.stringify({
+            name: document.getElementById('name').value,
+            type: document.getElementById('type').value
+        });
+
+        try {
+            const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body });
+            if(res.ok) {
+                window.location.reload();
+            } else {
+                const err = await res.json();
+                alert("Erro: " + err.message);
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+            }
+        } catch(e) { 
+            alert("Erro de rede"); 
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
+        }
+    });
+
+    async function deleteCategory(id) {
+        if(confirm("ATENÇÃO: Ao excluir esta categoria, todas as TRANSAÇÕES associadas a ela também serão excluídas.\n\nDeseja continuar?")) {
+            try {
+                const res = await fetch(`/categories/${id}`, { method: 'DELETE' });
+                if(res.ok) window.location.reload();
+                else alert("Erro ao excluir.");
+            } catch (error) {
+                alert("Erro de rede.");
+            }
+        }
+    }
+</script>

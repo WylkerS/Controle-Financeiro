@@ -1,0 +1,10 @@
+# Dependencies
+/node_modules
+
+# Database files
+*.sqlite
+*.sqlite-journal
+/database.db
+
+.env
+.DS_Store
