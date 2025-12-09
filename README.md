@@ -53,11 +53,11 @@ Este projeto foi desenvolvido como parte da disciplina de Programação Web. O o
 * Classificação por tipo (Entrada ou Saída) para facilitar o lançamento.
 * Exclusão em cascata (avisa e remove transações associadas para manter a integridade).
 
-## 📂 Estrutura do Projeto
-
 ## 👤 Team
 -   Wylker Esperidião
 -   Roberto Matheus
+
+## 📂 Estrutura do Projeto
 
 ```bash
 Personal-Expense-PWEB/
