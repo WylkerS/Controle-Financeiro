@@ -1,6 +1,6 @@
 # 💰 Gerenciador de Finanças Pessoais (PWEB)
 
-Um sistema web completo para controle financeiro pessoal, desenvolvido com foco em usabilidade, projeção de gastos futuros e gestão de múltiplos usuários (contas).
+Um sistema web completo para controle financeiro pessoal, desenvolvido com foco em usabilidade, projeção de gastos futuros e gestão de múltiplas contas.
 
 ![Status do Projeto](https://img.shields.io/badge/status-concluído-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -36,7 +36,7 @@ Este projeto foi desenvolvido como parte da disciplina de Programação Web. O o
 * Navegação rápida entre meses (passado e futuro).
 * Extrato das últimas movimentações.
 
-### 2. Gestão de Usuários (Contas)
+### 2. Gestão de Contas
 * Cadastro de entidades financeiras.
 * Definição de saldo inicial.
 
@@ -68,7 +68,7 @@ Personal-Expense-PWEB/
 ├── routes/           # Rotas da API e Views
 ├── services/         # Regras de negócio (Cálculos, Validações, Queries)
 ├── views/            # Templates EJS
-│   ├── accounts/     # Telas de Usuários
+│   ├── accounts/     # Telas de Contas
 │   ├── categories/   # Telas de Categorias
 │   ├── layout/       # Layout base (Navbar/Sidebar)
 │   ├── transactions/ # Telas de Transações
